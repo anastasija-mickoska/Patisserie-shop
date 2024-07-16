@@ -1,0 +1,32 @@
+﻿@model Patisserie.Models.Review
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1 class="delete">Delete Review</h1>
+
+<div class="card reviewCardDetails">
+            <div class="card-body">
+                <h5 class="card-title name" style="margin-bottom:2%">
+                    @Html.DisplayFor(model => model.User.Email)
+                </h5>
+                <h6 class="card-subtitle mb-2 text-muted"> - on @Html.DisplayFor(model => model.Product.Name) </h6>
+                <p class="card-text comment">
+                    "@Html.DisplayFor(model => model.Comment)"
+                </p>
+                <p class="card-text rating">
+                    @Html.DisplayNameFor(model=> model.Rating):@Html.DisplayFor(model => model.Rating)
+                </p>
+                <p class="card-text delete1">Are you sure you want to delete this?</p>
+                <div class="buttons">
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="ReviewId" />
+                        <input type="submit" id="deleteBtn" value="Delete" class="add" style="font-family:Merienda" />
+                        <button class="add">
+                            <a asp-action="Index">Back to List</a>
+                        </button>
+                    </form>
+                </div>
+            </div>
+</div>

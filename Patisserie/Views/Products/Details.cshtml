@@ -1,0 +1,61 @@
+﻿@model Patisserie.Models.Product
+
+@{
+    ViewData["Title"] = "Details";
+}
+<div class="card mb-3 details" style="margin-top:10vh">
+    <div class="row g-0">
+        <div class="col-md-4 details">
+            <img src=@Html.DisplayFor(model => model.ImageUrl) class="img-fluid rounded-start" alt=@Html.DisplayFor(model => model.Name)>
+            <p class="card-text details">
+                @Html.DisplayNameFor(model => model.Category) :
+                <a asp-controller="Categories" asp-action="Details" asp-route-id="@Model.CategoryId">
+                    @Html.DisplayFor(model => model.Category.Name)
+                </a>
+            </p>
+            <p class="card-text details">
+                Flavours: <br>
+                @if (Model.ProductFlavours != null && Model.ProductFlavours.Any())
+                {
+                    <ul>
+                        @foreach (var flavour in Model.ProductFlavours)
+                        {
+                            <li>
+                                <a class="flavours" asp-controller="Flavours" asp-action="Details" asp-route-id="@flavour.FlavourId">@flavour.Flavour.Name</a>
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <span style="font-family:Merienda; font-weight:300; font-size:1.5em; color:#DBD0C5">No flavours available.</span>
+                }
+            </p>
+
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title">
+                    @Html.DisplayFor(model => model.Name)
+                </h5>
+                <p class="card-text desc">
+                    @Html.DisplayFor(model => model.Description)
+                </p>
+                <p class="card-text price">
+                    @Html.DisplayFor(model => model.Price) &#8364
+                </p>
+                <div class="buttons">
+                    <button class="add">
+                        <a asp-action="#">Buy</a>
+                    </button>
+                    <button class="add">
+                        <a asp-action="Edit" asp-route-id="@Model?.ProductId">Edit</a>
+                    </button>
+                    <button class="add">
+                        <a asp-action="Delete" asp-route-id="@Model?.ProductId">Delete</a>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

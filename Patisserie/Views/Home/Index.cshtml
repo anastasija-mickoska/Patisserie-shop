@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<section id="home">
+    <div class="left">
+        <div class="homepage">
+            <span>The sweetest place in town</span>
+            <button id="homepageBtn"><a asp-controller="Products" asp-action="Index">Shop now</a></button>
+        </div>
+    </div>
+    <div class="right">
+    </div>
+</section>
+<script>
+    $(document).ready(function () {
+        $('.right').fadeIn(1500, function() {
+            $('span').fadeIn(1500, function () {
+                $('#homepageBtn').fadeIn(1500);
+            });
+        });
+    }); 
+</script>

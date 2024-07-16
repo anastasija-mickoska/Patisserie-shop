@@ -1,0 +1,44 @@
+﻿@model Patisserie.ViewModels.CategoryProductsViewModel
+
+@{
+    ViewData["Title"] = "DETAILS";
+}
+
+<h1 id="details">
+    @Html.DisplayFor(model => model.Category.Name)
+</h1>
+
+<div class="desc">
+     @Html.DisplayFor(model => model.Category.Description)
+</div>
+<div>
+    <button class="add">
+        <a asp-action="Edit" asp-route-id="@Model?.Category.CategoryId">Edit</a>
+    </button>
+    <button class="add">
+        <a asp-action="Delete" asp-route-id="@Model?.Category.CategoryId">Delete</a>
+    </button>
+    <button class="add">
+        <a asp-action="Index">Back to List</a>
+    </button>
+</div>
+<section id="categoryDetails">
+    @foreach(var item in Model.Products)
+    {
+        <a asp-controller="Products" asp-action="Details" asp-route-id="@item.ProductId">
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="@item.ImageUrl" class="img-fluid rounded-start" alt="@item.Name">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="title">@item.Name</h5>
+                            <p class="title">@item.Price 	&#8364;</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    }
+</section>

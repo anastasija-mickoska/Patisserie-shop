@@ -1,0 +1,28 @@
+﻿@model Patisserie.Models.Review
+
+@{
+    ViewData["Title"] = "Details";
+}
+<div class="card reviewCardDetails" style="margin-top:2%">
+    <div class="card-body">
+        <h5 class="card-title name">
+            @Html.DisplayFor(model => model.User.UserName)
+        </h5>
+        <h6 class="card-subtitle mb-2 text-muted"> - on @Html.DisplayFor(model => model.Product.Name) </h6>
+        <p class="card-text comment">
+             " @Html.DisplayFor(model => model.Comment) "
+        </p>
+        <p class="card-text rating"> <strong>
+                @Html.DisplayNameFor(model => model.Rating) : @Html.DisplayFor(model => model.Rating)
+        </strong>
+        </p>
+        <div class="buttons" style="margin-left:7.5%; margin-top:5%">
+            <button class="add">
+                <a asp-action="Edit" asp-route-id="@Model?.ReviewId">Edit</a>
+            </button>
+            <button class="add">
+                <a asp-action="Delete" asp-route-id="@Model?.ReviewId">Delete</a>
+            </button>
+        </div>
+    </div>
+</div>

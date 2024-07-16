@@ -1,0 +1,86 @@
+﻿@model Patisserie.Models.Flavour
+
+@{
+    ViewData["Title"] = "Details";
+}
+<section>
+    <div id="flavour-details" class="card mb-3 details fl" style="margin-top:15vh; overflow: hidden;">
+        <div class="row g-0">
+            <div class="col-md-4 details fl"> 
+                <img src=@Html.DisplayFor(model => model.FlavourImage) class="img-fluid rounded-start" alt=@Html.DisplayFor(model => model.Name)>
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        @Html.DisplayFor(model => model.Name)
+                    </h5>
+                    <p class="card-text desc">
+                        @Html.DisplayFor(model => model.Description)
+                    </p>
+                    <div class="buttons">
+                        <button class="add">
+                            <a asp-action="Edit" asp-route-id="@Model?.FlavourId">Edit</a>
+                        </button>
+                        <button class="add">
+                            <a asp-action="Delete" asp-route-id="@Model?.FlavourId">Delete</a>
+                        </button>
+                    </div>
+                    <p id="view-products" class="card-text">
+                        View products &#8594;
+                    </p>
+                    <div id="product-details" class="card-text details fl" style="display:none;">
+                        @if (Model.ProductFlavours != null && Model.ProductFlavours.Any())
+                        {
+                            foreach (var product in Model.ProductFlavours)
+                            {
+                                <a asp-controller="Products" asp-action="Details" asp-route-id="@product.ProductId">
+                                    <div class="card1 fl" style="display:none;">
+                                        <img src=@Html.DisplayFor(modelItem => product.Product.ImageUrl) class="card-img-top" alt="@Html.DisplayFor(modelItem => product.Product.Name)">
+                                        <div class="card-body">
+                                            <h5 class="title1 fl">@Html.DisplayFor(modelItem => product.Product.Name)</h5>
+                                        </div>
+                                    </div>
+                                </a>
+                            }
+                        }
+                        else
+                        {
+                            <span style="font-family:Merienda; font-weight:300; font-size:1em; color:#DBD0C5">No products available.</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    $(document).ready(function () {
+        var flavour = $('#flavour-details');
+        var details = $('#product-details');
+        var cards = details.find('.card1');
+                    var initialHeight = flavour.outerHeight();
+
+        $('#view-products').click(function () {
+            if (details.is(':visible')) {
+                cards.fadeOut(500, function () {
+                    details.slideUp(500, function () {
+                        flavour.animate({ height: initialHeight }, 500);
+                    });
+                });
+            } else {
+                var targetHeight = details.show().outerHeight();
+                details.hide();
+
+                flavour.animate({ height: targetHeight }, 500, function () {
+                    details.slideDown(500, function () {
+                        cards.each(function (index) {
+                            $(this).delay(index * 100).fadeIn(500);
+                        });
+                        flavour.height('auto');
+                    });
+                });
+            }
+        });
+    });
+</script>
+

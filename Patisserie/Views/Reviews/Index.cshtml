@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Patisserie.Models.Review>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1 id="review">REVIEWS</h1>
+
+<button class="add" style="margin-left:5%">
+    <a asp-action="Create">Create New</a>
+</button>
+<section id="reviews">
+    @foreach (var item in Model) {
+        <a asp-controller="Reviews" asp-action="Details" asp-route-id="@item.ReviewId">
+            <div class="card reviewCard">
+                <div class="card-header">
+                    @Html.DisplayFor(modelItem => item.Product.Name) <br />
+                    @Html.DisplayNameFor(model => model.Rating) : @Html.DisplayFor(modelItem => item.Rating)
+                </div>
+                <div class="card-body">
+                    <blockquote class="blockquote mb-0">
+                        <p>
+                            "@Html.DisplayFor(modelItem => item.Comment)"
+                        </p>
+                        <footer class="blockquote-footer">@Html.DisplayFor(modelItem => item.User.Email)</footer>
+                    </blockquote>
+                </div>
+            </div>
+        </a>
+    }
+</section>

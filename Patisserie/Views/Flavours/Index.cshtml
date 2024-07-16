@@ -1,0 +1,29 @@
+﻿@model IEnumerable<Patisserie.Models.Flavour>
+
+@{
+    ViewData["Title"] = "Flavours";
+}
+
+<h1 id="flavour">FLAVOURS</h1>
+
+
+<button class="add">
+    <a asp-action="Create">Create New</a>
+</button>
+<section id="flavours">
+    @foreach (var item in Model)
+    {
+        <a asp-controller="Flavours" asp-action="Details" asp-route-id="@item.FlavourId">
+            <div class="card bg-dark text-white flavourCard">
+                <div class="dark-overlay"></div>
+                <img src="@Html.DisplayFor(modelItem => item.FlavourImage)" class="card-img" alt="@Html.DisplayFor(modelItem => item.Name)">
+                <div class="card-img-overlay">
+                    <h5 class="card-title fl">
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </h5>
+                </div>
+            </div>
+        </a>
+    }
+</section>
+
