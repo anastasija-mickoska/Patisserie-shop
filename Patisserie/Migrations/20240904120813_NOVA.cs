@@ -5,7 +5,7 @@
 namespace Patisserie.Migrations
 {
     /// <inheritdoc />
-    public partial class UserName : Migration
+    public partial class NOVA : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -1,6 +1,4 @@
-html {
-  font-size: 14px;
-}
+@import url('site.css');
 * {
     margin:0;
     padding:0;
@@ -35,12 +33,13 @@ html {
 
 html {
   position: relative;
-  min-height: 100%;
+  min-height: 100vh;
 }
 
 body {
     margin-bottom: 60px;
     background-color:#1F1D1B;
+    min-height:100vh;
 }
 section {
     min-height:100vh;
@@ -84,9 +83,9 @@ header {
     font-family: "Merienda";
     font-weight: 500;
 }
-#categories, #flavours {
-    min-height:100vh;
-    margin-top:2.5%;
+#categories, #flavours, #reviews, #products {
+    height: auto;
+    margin-top: 2.5%;
 }
 .card-img-overlay {
     position:absolute;
@@ -147,6 +146,9 @@ header {
 .add1 {
     font-size:1.5em;
     margin-left:15%;
+}
+.add.fl {
+    margin-bottom:0;
 }
 .add a, .add1 a {
     text-decoration:none;
@@ -239,15 +241,12 @@ input[type="submit"] {
     font-size:1.5em;
     color:#DBD0C5;
     text-decoration:none;
-    height:8vh;
+    height:6vh;
 }
 a {
     text-decoration: none;
     font-family: "Merienda";
     font-weight: 300;
-}
-#products {
-    min-height:150vh;
 }
 .card.mb-3.details {
     width: 80%;
@@ -268,7 +267,6 @@ a {
     font-size:1em;
     color:#DBD0C5;
     padding-left:10%;
-    padding-right:10%;
 }
 .card-text.details {
     font-size:1.5em;
@@ -307,8 +305,9 @@ ul {
     overflow: auto;
 }
 .buttons {
-    width:90%;
-    margin-left:10%;
+    width: 90%;
+    margin-left: 10%;
+    margin-top: auto;
 }
 a.flavours {
     color:#DBD0C5;
@@ -349,6 +348,9 @@ a.flavours {
 }
 #product-details {
     display:none;
+}
+#view-products {
+    margin-top:0;
 }
 #view-products:hover {
     cursor:pointer;
@@ -409,9 +411,10 @@ a.flavours {
     box-shadow: -20px 0 20px -20px rgba(0, 0, 0, 0.9);
 }
 .homepage {
-    width:70%;
-    margin-left:15%;
+    width:80%;
+    margin-left:10%;
     margin-top:30%;
+    text-align:center;
 }
 .left span {
     font-family:"Allura";
@@ -430,7 +433,6 @@ a.flavours {
     letter-spacing:0.2em;
     margin-top:10%;
     box-shadow:10px 10px 10px 10px rgba(0,0,0,0.4);
-    margin-left:25%;
 }
 #homepageBtn a {
     color:black;
@@ -443,7 +445,7 @@ a.flavours {
 }
 .reviewCard {
     width:40%;
-    height:35vh;
+    height:30vh;
     overflow:hidden;
     margin-left:5%;
     margin-bottom:2%;
@@ -527,6 +529,9 @@ a.flavours {
 .card-text.delete1 {
     font-size:1.75em;
 }
+.logoutBtn, .loginEmail {
+    width:200px;
+}
 @media screen and (max-width: 768px) {
     .nav-item {
         font-size: 1.5em;
@@ -537,7 +542,9 @@ a.flavours {
         height:50vh;
     }
     .homepage {
-        margin-top:5%;
+        margin-top: 15%;
+        width:90%;
+        margin-left:5%;
     }
     .homepage span {
         font-size:5em;
@@ -631,5 +638,20 @@ a.flavours {
     }
     .card-text.delete1 {
         font-size:1.5em;
+    }
+    .card-text.desc {
+        flex: 1;
+        max-height: 25vh;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 10; 
+        -webkit-box-orient: vertical;
+        margin-bottom: 10px;
+        margin-top:20%;
+    }
+    .card-title.product {
+        font-size:1.25em;
+        margin-top:5%;
     }
 }

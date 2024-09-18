@@ -20,9 +20,17 @@ namespace Patisserie.Models
             var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var UserManager = serviceProvider.GetRequiredService<UserManager<PatisserieUser>>();
             IdentityResult roleResult;
-            //Add Admin Role
-            var roleCheck = await RoleManager.RoleExistsAsync("Admin");
-            if (!roleCheck) { roleResult = await RoleManager.CreateAsync(new IdentityRole("Admin")); }
+            IdentityResult roleResult1;
+                var roleExist = await RoleManager.RoleExistsAsync("Admin");
+                if (!roleExist)
+                {
+                    roleResult = await RoleManager.CreateAsync(new IdentityRole("Admin"));
+                }
+                var roleExist1 = await RoleManager.RoleExistsAsync("User");
+                if (!roleExist1)
+                {
+                    roleResult1 = await RoleManager.CreateAsync(new IdentityRole("User"));
+                }
             PatisserieUser user = await UserManager.FindByEmailAsync("admin@patisserie.com");
             if (user == null)
             {
@@ -32,12 +40,6 @@ namespace Patisserie.Models
                 string userPWD = "Admin1234";
                 IdentityResult chkUser = await UserManager.CreateAsync(User, userPWD);
                 if (chkUser.Succeeded) { var result1 = await UserManager.AddToRoleAsync(User, "Admin"); }
-                IdentityResult userRoleResult;
-                var userRoleCheck = await RoleManager.RoleExistsAsync("User");
-                if (!userRoleCheck)
-                {
-                    userRoleResult = await RoleManager.CreateAsync(new IdentityRole("User"));
-                }
             }
         }
         public static void Initialize(IServiceProvider serviceProvider)

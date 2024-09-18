@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Details";
 }
-<div class="card mb-3 details" style="margin-top:10vh">
+<div class="card mb-3 details" style="margin-top:10vh; height:auto">
     <div class="row g-0">
         <div class="col-md-4 details">
             <img src=@Html.DisplayFor(model => model.ImageUrl) class="img-fluid rounded-start" alt=@Html.DisplayFor(model => model.Name)>
@@ -31,11 +31,17 @@
                     <span style="font-family:Merienda; font-weight:300; font-size:1.5em; color:#DBD0C5">No flavours available.</span>
                 }
             </p>
-
+            <p class="card-text details">
+                <strong>Average rating:</strong>
+                @if (ViewData["AverageRating"] != null)
+                {
+                    @(ViewData["AverageRating"] as double?)
+                }
+            </p>
         </div>
         <div class="col-md-8">
             <div class="card-body">
-                <h5 class="card-title">
+                <h5 class="card-title product">
                     @Html.DisplayFor(model => model.Name)
                 </h5>
                 <p class="card-text desc">

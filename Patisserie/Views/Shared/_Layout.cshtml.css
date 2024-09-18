@@ -39,10 +39,34 @@ button.accept-policy {
   line-height: inherit;
 }
 
-.footer {
-  position: absolute;
+footer {
+  position: relative;
   bottom: 0;
   width: 100%;
+  height:auto;
   white-space: nowrap;
-  line-height: 60px;
+  background-color:#DBD0C5;
+}
+.footer1 {
+    width: 30%;
+    margin-left: 3%;
+    height: 100%;
+    float: left;
+    font-family: "Merienda";
+    font-size: 1.75em;
+    font-weight: 300;
+    color: black;
+    text-align: left;
+    padding: 1%;
+}
+main {
+    height:auto;
+}
+@media screen and (max-width:768px) {
+    .footer1 {
+        font-size: 1.25em;
+        margin-left: 0;
+        margin-right: 3%;
+        padding-top: 5%;
+    }
 }

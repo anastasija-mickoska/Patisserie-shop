@@ -56,11 +56,15 @@ namespace Patisserie.Controllers
                           .Include(p => p.Category)
                           .Include(p => p.ProductFlavours)
                           .ThenInclude(p => p.Flavour)
+                          .Include(p => p.Reviews)
                           .FirstOrDefault(p => p.ProductId == id);
             if (product == null)
             {
                 return NotFound();
             }
+
+            var averageRating = product.AverageRating();
+            ViewData["AverageRating"] = averageRating;
 
             return View(product);
         }
@@ -96,14 +100,20 @@ namespace Patisserie.Controllers
             {
                 return NotFound();
             }
-
-            var product = await _context.Product.FindAsync(id);
+            var product = _context.Product.Where(m => m.ProductId == id).Include(m => m.ProductFlavours).First();
             if (product == null)
             {
                 return NotFound();
             }
+            var flavours = _context.Flavour.AsEnumerable().OrderBy(s =>s.Name);
+            ProductsFlavoursEditViewModel viewmodel = new ProductsFlavoursEditViewModel
+        {
+                Product = product,
+                FlavourList = new MultiSelectList(flavours, "Id", "Name"),
+                SelectedFlavours = product.ProductFlavours.Select(pf => pf.FlavourId)
+        };
             ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Name", product.CategoryId);
-            return View(product);
+            return View(viewmodel);
         }
 
         // POST: Products/Edit/5
@@ -111,35 +121,41 @@ namespace Patisserie.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,Name,Description,Price,ImageUrl,CategoryId")] Product product)
+        public async Task<IActionResult> Edit(int id, ProductsFlavoursEditViewModel viewmodel)
         {
-            if (id != product.ProductId)
-            {
-                return NotFound();
-            }
-
+            if (id != viewmodel.Product.ProductId) { return NotFound(); }
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(product);
+                    _context.Update(viewmodel.Product);
+                    await _context.SaveChangesAsync();
+                    IEnumerable<int> newFlavourList = viewmodel.SelectedFlavours;
+                    IEnumerable<int> prevFlavourList = _context.ProductFlavours.Where(s => s.ProductId == id).Select(s => s.FlavourId);
+                    IQueryable<ProductFlavour> toBeRemoved = _context.ProductFlavours.Where(s => s.ProductId == id);
+                    if (newFlavourList != null)
+                    {
+                        toBeRemoved = toBeRemoved.Where(s => !newFlavourList.Contains(s.FlavourId));
+                        foreach (int flavourId in newFlavourList)
+                        {
+                            if (!prevFlavourList.Any(s => s == flavourId))
+                            {
+                                _context.ProductFlavours.Add(new ProductFlavour{ FlavourId = flavourId, ProductId = id });
+                            }
+                        }
+                    }
+                    _context.ProductFlavours.RemoveRange(toBeRemoved);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductExists(product.ProductId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!ProductExists(viewmodel.Product.ProductId)) { return NotFound(); }
+                    else { throw; }
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Description", product.CategoryId);
-            return View(product);
+            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name", viewmodel.Product.CategoryId);
+            return View(viewmodel);
         }
 
         // GET: Products/Delete/5

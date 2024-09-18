@@ -17,6 +17,23 @@ namespace Patisserie.Models
         public ICollection<ProductFlavour>? ProductFlavours { get; set;}
         public ICollection<Review>? Reviews { get; set;}
         public ICollection<UserProduct>? UserProducts { get; set; }
-        
+        public double AverageRating()
+        {
+            if (Reviews == null || Reviews.Count == 0)
+            {
+                return 0;
+            }
+            int sumOfRatings = 0;
+            foreach (var item in Reviews)
+            {
+                if (item.Rating != null)
+                {
+                    sumOfRatings += (int)item.Rating;
+                }
+            }
+            double averageRating = (double)sumOfRatings / Reviews.Count;
+            return averageRating;
+        }
+
     }
 }
