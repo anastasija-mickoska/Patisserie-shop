@@ -6,9 +6,12 @@
 
 <h1 id="category">CATEGORIES</h1>
 
-<button class="add" style="margin-left:5%">
-    <a asp-action="Create">Create New</a>
-</button>
+@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+    <button class="add" style="margin-left:5%">
+        <a asp-action="Create">Create New</a>
+    </button>
+}
 <form asp-controller="Categories" asp-action="Index" method="get">
     <div class="form-group" style="margin-top:0; margin-left:5%; display: flex; align-items: center;">
         <input type="text" id="searchCategory" asp-for="searchString" placeholder="Search by category name..." />

@@ -72,26 +72,61 @@ namespace Patisserie.Controllers
         // GET: Products/Create
         public IActionResult Create()
         {
+            var flavours = _context.Flavour.OrderBy(s => s.Name).ToList();
+            var viewmodel = new ProductsFlavoursEditViewModel
+            {
+                Product = new Product(),
+                FlavourList = flavours.Select(f => new SelectListItem { Value = f.FlavourId.ToString(), Text = f.Name })
+            };
+
             ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Name");
-            return View();
+
+            return View(viewmodel);
         }
 
         // POST: Products/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Products/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,Name,Description,Price,ImageUrl,CategoryId")] Product product)
+        public async Task<IActionResult> Create(ProductsFlavoursEditViewModel viewmodel)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(product);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    // Add the product to the database
+                    _context.Add(viewmodel.Product);
+                    await _context.SaveChangesAsync();
+
+                    // Assign the selected flavours
+                    if (viewmodel.SelectedFlavours != null && viewmodel.SelectedFlavours.Any())
+                    {
+                        foreach (int flavourId in viewmodel.SelectedFlavours)
+                        {
+                            _context.ProductFlavours.Add(new ProductFlavour { FlavourId = flavourId, ProductId = viewmodel.Product.ProductId });
+                        }
+                        await _context.SaveChangesAsync();
+                    }
+
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, "An error occurred while creating the product.");
+                }
             }
-            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Name", product.CategoryId);
-            return View(product);
+
+            // Repopulate ViewData and FlavourList in case of validation failure
+            var flavours = _context.Flavour.OrderBy(s => s.Name).ToList();
+            viewmodel.FlavourList = flavours.Select(f => new SelectListItem { Value = f.FlavourId.ToString(), Text = f.Name });
+
+            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Name", viewmodel.Product.CategoryId);
+
+            return View(viewmodel);
         }
+
 
         // GET: Products/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -100,21 +135,29 @@ namespace Patisserie.Controllers
             {
                 return NotFound();
             }
-            var product = _context.Product.Where(m => m.ProductId == id).Include(m => m.ProductFlavours).First();
+
+            var product = await _context.Product
+                                        .Where(m => m.ProductId == id)
+                                        .Include(m => m.ProductFlavours)
+                                        .FirstOrDefaultAsync();
             if (product == null)
             {
                 return NotFound();
             }
-            var flavours = _context.Flavour.AsEnumerable().OrderBy(s =>s.Name);
-            ProductsFlavoursEditViewModel viewmodel = new ProductsFlavoursEditViewModel
-        {
+
+            var flavours = _context.Flavour.OrderBy(s => s.Name).ToList();
+
+            var viewmodel = new ProductsFlavoursEditViewModel
+            {
                 Product = product,
-                FlavourList = new MultiSelectList(flavours, "Id", "Name"),
-                SelectedFlavours = product.ProductFlavours.Select(pf => pf.FlavourId)
-        };
+                FlavourList = flavours.Select(f => new SelectListItem { Value = f.FlavourId.ToString(), Text = f.Name }),
+                SelectedFlavours = product.ProductFlavours.Select(pf => pf.FlavourId).ToList()
+            };
+
             ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Name", product.CategoryId);
             return View(viewmodel);
         }
+
 
         // POST: Products/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -123,40 +166,51 @@ namespace Patisserie.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, ProductsFlavoursEditViewModel viewmodel)
         {
-            if (id != viewmodel.Product.ProductId) { return NotFound(); }
-            if (ModelState.IsValid)
+            if (id != viewmodel.Product.ProductId)
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
             {
                 try
                 {
                     _context.Update(viewmodel.Product);
                     await _context.SaveChangesAsync();
-                    IEnumerable<int> newFlavourList = viewmodel.SelectedFlavours;
+                    IEnumerable<int> newFlavourList = viewmodel.SelectedFlavours ?? Enumerable.Empty<int>();
                     IEnumerable<int> prevFlavourList = _context.ProductFlavours.Where(s => s.ProductId == id).Select(s => s.FlavourId);
-                    IQueryable<ProductFlavour> toBeRemoved = _context.ProductFlavours.Where(s => s.ProductId == id);
-                    if (newFlavourList != null)
+
+                    var toBeRemoved = _context.ProductFlavours.Where(s => s.ProductId == id && !newFlavourList.Contains(s.FlavourId));
+                    _context.ProductFlavours.RemoveRange(toBeRemoved);
+                    foreach (int flavourId in newFlavourList)
                     {
-                        toBeRemoved = toBeRemoved.Where(s => !newFlavourList.Contains(s.FlavourId));
-                        foreach (int flavourId in newFlavourList)
+                        if (!prevFlavourList.Contains(flavourId))
                         {
-                            if (!prevFlavourList.Any(s => s == flavourId))
-                            {
-                                _context.ProductFlavours.Add(new ProductFlavour{ FlavourId = flavourId, ProductId = id });
-                            }
+                            _context.ProductFlavours.Add(new ProductFlavour { FlavourId = flavourId, ProductId = id });
                         }
                     }
-                    _context.ProductFlavours.RemoveRange(toBeRemoved);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductExists(viewmodel.Product.ProductId)) { return NotFound(); }
-                    else { throw; }
+                    if (!ProductExists(viewmodel.Product.ProductId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name", viewmodel.Product.CategoryId);
+
+            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Name", viewmodel.Product.CategoryId);
+            var flavours = _context.Flavour.OrderBy(s => s.Name).ToList();
+            viewmodel.FlavourList = flavours.Select(f => new SelectListItem { Value = f.FlavourId.ToString(), Text = f.Name });
             return View(viewmodel);
         }
+
 
         // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int? id)

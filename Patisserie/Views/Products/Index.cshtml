@@ -6,9 +6,12 @@
 
 <h1 id="product">PRODUCTS</h1>
 
-<button class="add">
-    <a asp-action="Create">Create New</a>
-</button>
+@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+    <button class="add" style="margin-left:5%">
+        <a asp-action="Create">Create New</a>
+    </button>
+}
 <form asp-controller="Products" asp-action="Index" method="get">
     <div class="form-group" style="margin-top:0; margin-left:2.5%; display: flex; align-items: center;">
         <input type="text" id="searchProduct" asp-for="searchString" placeholder="Search by name, category or flavours..."/>
@@ -26,7 +29,10 @@
                     <p class="title1">
                         @Html.DisplayFor(modelItem => item.Price)	&#8364;
                     </p>
-                    <button class="add1"><a href="#">Order now</a></button>
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("User"))
+                    {
+                        <button class="add1"><a href="#">Order now</a></button>
+                    }
                 </div>
             </div>
         </a>

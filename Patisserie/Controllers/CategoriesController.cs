@@ -69,7 +69,6 @@ namespace Patisserie.Controllers
         // GET: Categories/Create
         public IActionResult Create()
         {
-            ViewBag.Products = new MultiSelectList(_context.Product, "ProductId", "Name");
             return View();
         }
 
@@ -80,7 +79,7 @@ namespace Patisserie.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CategoryId,Name,Description,CategoryImage")] Category category)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 _context.Add(category);
                 await _context.SaveChangesAsync();

@@ -12,12 +12,18 @@
      @Html.DisplayFor(model => model.Category.Description)
 </div>
 <div>
+    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
     <button class="add">
         <a asp-action="Edit" asp-route-id="@Model?.Category.CategoryId">Edit</a>
     </button>
+}
+    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
     <button class="add">
         <a asp-action="Delete" asp-route-id="@Model?.Category.CategoryId">Delete</a>
     </button>
+}
     <button class="add">
         <a asp-action="Index">Back to List</a>
     </button>

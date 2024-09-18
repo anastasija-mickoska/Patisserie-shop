@@ -18,12 +18,18 @@
                         @Html.DisplayFor(model => model.Description)
                     </p>
                     <div class="buttons">
-                        <button class="add fl">
-                            <a asp-action="Edit" asp-route-id="@Model?.FlavourId">Edit</a>
-                        </button>
-                        <button class="add fl">
-                            <a asp-action="Delete" asp-route-id="@Model?.FlavourId">Delete</a>
-                        </button>
+                            @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                            {
+                                <button class="add fl">
+                                    <a asp-action="Edit" asp-route-id="@Model?.FlavourId">Edit</a>
+                                </button>
+                            }
+                            @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                            {
+                                <button class="add fl">
+                                    <a asp-action="Delete" asp-route-id="@Model?.FlavourId">Delete</a>
+                                </button>
+                            }
                     </div>
                     <p id="view-products" class="card-text">
                         View products &#8594;

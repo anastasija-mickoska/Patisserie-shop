@@ -51,15 +51,21 @@
                     @Html.DisplayFor(model => model.Price) &#8364
                 </p>
                 <div class="buttons">
-                    <button class="add">
-                        <a asp-action="#">Buy</a>
-                    </button>
-                    <button class="add">
-                        <a asp-action="Edit" asp-route-id="@Model?.ProductId">Edit</a>
-                    </button>
-                    <button class="add">
-                        <a asp-action="Delete" asp-route-id="@Model?.ProductId">Delete</a>
-                    </button>
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("User"))
+                    {
+                        <button class="add">
+                            <a asp-action="#">Order now</a>
+                        </button>
+                    }
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        <button class="add">
+                            <a asp-action="Edit" asp-route-id="@Model?.ProductId">Edit</a>
+                        </button>
+                        <button class="add">
+                            <a asp-action="Delete" asp-route-id="@Model?.ProductId">Delete</a>
+                        </button>
+                    }
                 </div>
             </div>
         </div>

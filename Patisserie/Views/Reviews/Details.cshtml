@@ -16,13 +16,16 @@
                 @Html.DisplayNameFor(model => model.Rating) : @Html.DisplayFor(model => model.Rating)
         </strong>
         </p>
-        <div class="buttons" style="margin-left:7.5%; margin-top:5%">
-            <button class="add">
+        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+        {
+            <div class="buttons" style="margin-left:7.5%; margin-top:5%">
+                <button class="add">
                 <a asp-action="Edit" asp-route-id="@Model?.ReviewId">Edit</a>
             </button>
             <button class="add">
                 <a asp-action="Delete" asp-route-id="@Model?.ReviewId">Delete</a>
             </button>
         </div>
+        }
     </div>
 </div>

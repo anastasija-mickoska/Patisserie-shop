@@ -7,9 +7,12 @@
 <h1 id="flavour">FLAVOURS</h1>
 
 
-<button class="add">
-    <a asp-action="Create">Create New</a>
-</button>
+@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+    <button class="add" style="margin-left:5%">
+        <a asp-action="Create">Create New</a>
+    </button>
+}
 <section id="flavours">
     @foreach (var item in Model)
     {
