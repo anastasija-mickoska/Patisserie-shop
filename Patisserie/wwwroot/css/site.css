@@ -59,7 +59,7 @@ header {
 .nav-item {
     width:15%;
     text-align:center;
-    font-size:1.75em;
+    font-size:1.75rem;
 }
 .nav-item.loginRegister {
     float:right; 
@@ -73,9 +73,9 @@ header {
      float:right; 
      width:150px;
 }
-#category, #details, #product, #flavour, #login1, #register1,#profile, #review {
-    font-size: 3.5em;
-    letter-spacing: 0.2em;
+#category, #details, #product, #flavour, #login1, #register1,#profile, #review, #myOrders {
+    font-size: 3.5rem;
+    letter-spacing: 0.2rem;
     width: 100%;
     text-align: center;
     margin-top:5%;
@@ -96,7 +96,7 @@ header {
     top:70%;
 }
 .card-title {
-    font-size: 2.5em;
+    font-size: 2.5rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     text-align: center;
@@ -134,9 +134,10 @@ header {
     border-radius:10px;
 }
 .add, .add1 {
-    font-size: 1.75em;
+    font-family:"Merienda";
+    font-size: 1.75rem;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.1rem;
     border: none;
     margin: 2.5%;
     padding: 1%;
@@ -144,7 +145,7 @@ header {
     background-color:#DBD0C5;
 }
 .add1 {
-    font-size:1.5em;
+    font-size:1.5rem;
     margin-left:15%;
 }
 .add.fl {
@@ -169,7 +170,7 @@ header {
     font-family: "Merienda";
     font-weight: 700;
     color: #DBD0C5;
-    font-size: 2.5em;
+    font-size: 2.5rem;
     margin-top:5%;
 }
 .control-label, .form-control {
@@ -531,6 +532,41 @@ a.flavours {
 }
 .logoutBtn, .loginEmail {
     width:200px;
+}
+.BoughtProduct {
+    height:30vh;
+    width:45%;
+    margin-left:2.5%;
+    margin-right:2.5%;
+    box-shadow:5px 5px 5px #3a3a3a;
+    margin-top:5%;
+    float:left;
+}
+.BoughtProduct:hover {
+    box-shadow:10px 10px 10px #3a3a3a;
+}
+.card-title1 {
+    font-size:2rem;
+    font-family:"Merienda";
+    font-weight:500;
+    color:#DBD0C5;
+    text-transform:uppercase;
+    letter-spacing:0.1rem;
+    margin-left:2.5%;
+}
+.productReviews {
+    background-color:#1F1D1B;
+    color:#DBD0C5;
+    box-shadow:5px 5px 5px #3a3a3a;
+    font-family:"Merienda";
+    float:left;
+    font-size:1rem;
+    margin-left:10%;
+    height:10vh;
+}
+.reviews {
+    min-height:10vh;
+    margin-bottom:2.5%;
 }
 @media screen and (max-width: 768px) {
     .nav-item {

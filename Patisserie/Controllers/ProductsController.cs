@@ -2,24 +2,72 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Patisserie.Data;
 using Patisserie.Models;
 using Patisserie.ViewModels;
+using Patisserie.Areas.Identity.Data;
 
 namespace Patisserie.Controllers
 {
     public class ProductsController : Controller
     {
         private readonly PatisserieContext _context;
+        private readonly UserManager<PatisserieUser> _userManager;
 
-        public ProductsController(PatisserieContext context)
+        public ProductsController(PatisserieContext context, UserManager<PatisserieUser> userManager)
         {
             _context = context;
+            _userManager= userManager;
+        }
+        [HttpPost]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> BuyProduct(int id)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Challenge();
+            }
+
+            var product = await _context.Product.FindAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            var userProduct = new UserProduct
+            {
+                UserId = user.Id,
+                ProductId = product.ProductId,
+            };
+
+            _context.UserProducts.Add(userProduct);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(MyOrders));
         }
 
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> MyOrders()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Challenge();
+            }
+
+            var userProducts = await _context.UserProducts
+                .Include(up => up.Product)
+                .Where(up => up.UserId == user.Id)
+                .ToListAsync();
+
+            return View(userProducts);
+        }
         // GET: Products
         public async Task<IActionResult> Index(string searchString)
         {
@@ -57,6 +105,7 @@ namespace Patisserie.Controllers
                           .Include(p => p.ProductFlavours)
                           .ThenInclude(p => p.Flavour)
                           .Include(p => p.Reviews)
+                          .ThenInclude(p => p.User)
                           .FirstOrDefault(p => p.ProductId == id);
             if (product == null)
             {

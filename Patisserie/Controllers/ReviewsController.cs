@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Patisserie.Areas.Identity.Data;
 using Patisserie.Data;
 using Patisserie.Models;
+using Patisserie.ViewModels;
 
 namespace Patisserie.Controllers
 {
@@ -82,6 +83,44 @@ namespace Patisserie.Controllers
 
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", review.ProductId);
             return View(review);
+        }
+        [HttpGet]
+        public async Task<IActionResult> CreateReview(int id)
+        {
+            var product = await _context.Product.FirstOrDefaultAsync(p => p.ProductId == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+
+            var viewModel = new CreateReviewViewModel
+            {
+                Review = new Review { ProductId = product.ProductId }, 
+                User = currentUser,
+                ProductName = product.Name 
+            };
+
+            ViewData["ProductName"] = product.Name;
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateReview(CreateReviewViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                viewModel.Review.UserId = viewModel.User.Id; 
+                _context.Review.Add(viewModel.Review);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(viewModel);
         }
 
 

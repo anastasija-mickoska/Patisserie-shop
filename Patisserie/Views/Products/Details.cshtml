@@ -50,12 +50,30 @@
                 <p class="card-text price">
                     @Html.DisplayFor(model => model.Price) &#8364
                 </p>
+                <div class="reviews">
+                        @if (Model.Reviews != null)
+                        {
+                            @foreach (var review in Model.Reviews)
+                            {
+                                <div class="card productReviews">
+                                    <div class="card-body">
+                                        <p>
+                                            @review.Comment <br />
+                                            - @review.User.UserName <br />
+                                            Rating: @review.Rating
+                                        </p>
+                                    </div>
+                                </div>
+                            }
+                        }
+                </div>
                 <div class="buttons">
                     @if (User.Identity.IsAuthenticated && User.IsInRole("User"))
                     {
-                        <button class="add">
-                            <a asp-action="#">Order now</a>
-                        </button>
+                        <form asp-action="BuyProduct" method="post">
+                            <input type="hidden" name="id" value="@Model.ProductId" />
+                            <button class="add" type="submit">Order now</button>
+                        </form>
                     }
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                     {

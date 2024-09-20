@@ -1,0 +1,29 @@
+﻿@model IEnumerable<Patisserie.Models.UserProduct>
+
+<h2 id="myOrders">MY ORDERS</h2>
+
+<section>
+    @foreach (var userProduct in Model)
+    {
+        <div class="BoughtProduct">
+            <div class="row g-0">
+                <div class="col-md-4 bought">
+                    <img src="@Html.DisplayFor(modelItem => userProduct.Product.ImageUrl)" alt="Product Image" class="img-fluid rounded-start">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            @Html.DisplayFor(modelItem => userProduct.Product.Name)
+                        </h5>
+                        <p class="card-title1">
+                            @Html.DisplayFor(modelItem => userProduct.Product.Price) &#8364;
+                        </p>
+                        <button class="add">
+                            <a asp-action="CreateReview" asp-controller="Reviews" asp-route-id="@userProduct.Product.ProductId">Create Review</a>
+                        </button> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</section>

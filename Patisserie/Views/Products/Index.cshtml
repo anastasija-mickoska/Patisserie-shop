@@ -31,7 +31,10 @@
                     </p>
                     @if (User.Identity.IsAuthenticated && User.IsInRole("User"))
                     {
-                        <button class="add1"><a href="#">Order now</a></button>
+                        <form asp-action="BuyProduct" method="post">
+                            <input type="hidden" name="id" value="@item.ProductId" />
+                            <button class="add" type="submit">Order now</button>
+                        </form>
                     }
                 </div>
             </div>
