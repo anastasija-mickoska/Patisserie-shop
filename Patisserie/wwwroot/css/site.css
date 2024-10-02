@@ -224,25 +224,23 @@ input[type="submit"] {
     float: left;
     margin-right: 2.5%;
     margin-left: 2.5%;
-    /* Removed fixed height for dynamic content */
     background-color: #1F1D1B;
     margin-bottom: 2%;
     border: none;
     border-radius: 10px;
     box-shadow: 1px 1px 1px 1px #242321;
-    display: flex; /* Enable Flexbox for the card */
-    flex-direction: column; /* Stack children vertically */
-    /* Allow the card to grow based on content */
+    display: flex; 
+    flex-direction: column; 
 }
 .card1:hover {
     box-shadow: 5px 5px 5px 5px #3e3a3a;
 }
 .card-body {
-    flex-grow: 1; /* Allow the card body to take up remaining space */
+    flex-grow: 1; 
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Distribute space between elements */
-    padding: 15px; /* Optional padding for the card body */
+    justify-content: space-between; 
+    padding: 15px; 
 }
 
 .card1 img {
@@ -427,13 +425,13 @@ a.flavours {
 .homepage {
     width:80%;
     margin-left:10%;
-    margin-top:30%;
+    margin-top:20%;
     text-align:center;
 }
 .left span {
     font-family:"Allura";
     font-weight:500;
-    font-size:8em;
+    font-size:7.5em;
     color:#DBD0C5;
     letter-spacing:0.1em;
     line-height:1em;
@@ -591,6 +589,9 @@ a.flavours {
     font-size: 1.25em;
     padding: 1.5%;
     opacity: 0.8;
+}
+#productName {
+    font-size:2em;
 }
     @media screen and (max-width: 768px) {
         #fileInput {
