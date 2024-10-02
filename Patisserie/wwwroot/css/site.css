@@ -86,6 +86,8 @@ header {
 #categories, #flavours, #reviews, #products {
     height: auto;
     margin-top: 2.5%;
+    margin-bottom:5%;
+    min-height:120vh;
 }
 .card-img-overlay {
     position:absolute;
@@ -164,7 +166,7 @@ header {
     font-family:"Merienda";
     font-weight:500;
     color:#DBD0C5;
-    margin-top:5%;
+    margin-top:2.5%;
 }
 .create, .edit, .delete {
     font-family: "Merienda";
@@ -222,16 +224,27 @@ input[type="submit"] {
     float: left;
     margin-right: 2.5%;
     margin-left: 2.5%;
-    height: 55vh;
+    /* Removed fixed height for dynamic content */
     background-color: #1F1D1B;
     margin-bottom: 2%;
-    border:none;
-    border-radius:10px;
+    border: none;
+    border-radius: 10px;
     box-shadow: 1px 1px 1px 1px #242321;
+    display: flex; /* Enable Flexbox for the card */
+    flex-direction: column; /* Stack children vertically */
+    /* Allow the card to grow based on content */
 }
 .card1:hover {
-    box-shadow:5px 5px 5px 5px #3e3a3a;
+    box-shadow: 5px 5px 5px 5px #3e3a3a;
 }
+.card-body {
+    flex-grow: 1; /* Allow the card body to take up remaining space */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Distribute space between elements */
+    padding: 15px; /* Optional padding for the card body */
+}
+
 .card1 img {
     height:30vh;
     width:100%;
@@ -568,126 +581,171 @@ a.flavours {
     min-height:10vh;
     margin-bottom:2.5%;
 }
-@media screen and (max-width: 768px) {
-    .nav-item {
-        font-size: 1.5em;
-        text-align:left;
-    }
-    .left, .right {
-        width:100%;
-        height:50vh;
-    }
-    .homepage {
-        margin-top: 15%;
-        width:90%;
-        margin-left:5%;
-    }
-    .homepage span {
-        font-size:5em;
-        letter-spacing:0.2em;
-    }
-    #homepageBtn {
-        font-size:1.5em;
-    }
-    #category, #details, #product, #flavour, #login1, #register1, #profile, #review, .edit, .create, .delete {
-        font-size: 2em;
-    }
-    .desc, .title {
-        font-size:1.25em;
-    }
-    .card.mb-3 {
-        width:100%;
-        height:50vh;
-    }
-    .col-md-4 img {
-        width:100%;
-        margin:0;
-        height:40vh;
-    }
-    .card.mb-3.details {
-        width:80%;
-        height:60vh;
-    }
-    .col-md-4.details, .col-md-8 {
-        width:40%;
-    }
-    .col-md-4.details img {
-        height:30vh;
-    }
-    .card-text.details, .card-text.details ul li a
-    {
-        font-size:1em;
-    }
-    .card-text.desc {
-        font-size:1em;
-        overflow:auto;
-    }
-    .add, .submitBtn, .add1  {
-        font-size:1.25em;
-    }
-    .flavourCard {
-        width: 100%;
-    }
-    .categoryCard, .reviewCard {
-        width: 90%;
-    }
-    .card1 {
-        width:45%;
-    }
-    .card-title, .card-title.fl, .card-text.price {
-        font-size: 1.75em;
-    }
-    #registerForm, #loginForm, #profile-form {
-        width:80%;
-        margin-left:10%;
-        margin-top:10vh;
-    }
-    .control-label, .form-control {
-        font-size:1.25em;
-    }
-    #searchProduct, #searchCategory, #view-products {
-        font-size:1.25em;
-    }
-    #flavour-details {
-        width:80%;
-        height:70vh;
-    }
-    .card1.fl {
-        width:100%;
-    }
-    .reviewCardDetails {
-        width:90%;
-        margin-left:5%;
-    }
-    .card-header, .card-title.name, .card-text.rating {
-        font-size:1.5em;
-    }
-    .blockquote.mb-0 footer, .card-text.comment {
-        font-size: 1.25em;
-    }
-    .card-text.comment, .card-text.rating {
-        margin-top:10%;
-        margin-bottom:10%;
-    }
-    .blockquote.mb-0 p, .card-subtitle.mb-2.text-muted{
-        font-size: 1em;
-    }
-    .card-text.delete1 {
-        font-size:1.5em;
-    }
-    .card-text.desc {
-        flex: 1;
-        max-height: 25vh;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 10; 
-        -webkit-box-orient: vertical;
-        margin-bottom: 10px;
-        margin-top:20%;
-    }
-    .card-title.product {
-        font-size:1.25em;
-        margin-top:5%;
-    }
+#fileInput, #fileInput1 {
+    font-family:"Merienda";
+    font-size:1.25em;
 }
+.select2-container--default .select2-selection--multiple {
+    font-family: "Merienda";
+    font-weight:300;
+    font-size: 1.25em;
+    padding: 1.5%;
+    opacity: 0.8;
+}
+    @media screen and (max-width: 768px) {
+        #fileInput {
+            font-size: 1em;
+        }
+
+        .nav-item {
+            font-size: 1.5em;
+            text-align: left;
+        }
+
+        .left, .right {
+            width: 100%;
+            height: 50vh;
+        }
+
+        .homepage {
+            margin-top: 15%;
+            width: 90%;
+            margin-left: 5%;
+        }
+
+            .homepage span {
+                font-size: 5em;
+                letter-spacing: 0.2em;
+            }
+
+        #homepageBtn {
+            font-size: 1.5em;
+        }
+
+        #category, #details, #product, #flavour, #login1, #register1, #profile, #review, .edit, .create, .delete {
+            font-size: 2em;
+        }
+
+        .desc, .title {
+            font-size: 1.25em;
+        }
+
+        .card.mb-3 {
+            width: 100%;
+            height: 50vh;
+        }
+
+        .col-md-4 img {
+            width: 100%;
+            margin: 0;
+            height: 40vh;
+        }
+
+        .card.mb-3.details {
+            width: 80%;
+            height: 60vh;
+        }
+
+        .col-md-4.details, .col-md-8 {
+            width: 40%;
+        }
+
+            .col-md-4.details img {
+                height: 30vh;
+            }
+
+        .card-text.details, .card-text.details ul li a {
+            font-size: 1em;
+        }
+
+        .card-text.desc {
+            font-size: 1em;
+            overflow: auto;
+        }
+
+        .add, .submitBtn, .add1 {
+            font-size: 1.25em;
+        }
+
+        .flavourCard {
+            width: 100%;
+        }
+
+        .categoryCard, .reviewCard {
+            width: 90%;
+        }
+
+        .card1 {
+            width: 45%;
+        }
+
+        .card-title, .card-title.fl, .card-text.price {
+            font-size: 1.75em;
+        }
+
+        #registerForm, #loginForm, #profile-form {
+            width: 80%;
+            margin-left: 10%;
+            margin-top: 10vh;
+        }
+
+        .control-label, .form-control {
+            font-size: 1.25em;
+        }
+
+        #searchProduct, #searchCategory, #view-products {
+            font-size: 1.25em;
+        }
+
+        #flavour-details {
+            width: 80%;
+            height: 70vh;
+        }
+
+        .card1.fl {
+            width: 100%;
+        }
+
+        .reviewCardDetails {
+            width: 90%;
+            margin-left: 5%;
+        }
+
+        .card-header, .card-title.name, .card-text.rating {
+            font-size: 1.5em;
+        }
+
+        .blockquote.mb-0 footer, .card-text.comment {
+            font-size: 1.25em;
+        }
+
+        .card-text.comment, .card-text.rating {
+            margin-top: 10%;
+            margin-bottom: 10%;
+        }
+
+        .blockquote.mb-0 p, .card-subtitle.mb-2.text-muted {
+            font-size: 1em;
+        }
+
+        .card-text.delete1 {
+            font-size: 1.5em;
+        }
+
+        .card-text.desc {
+            flex: 1;
+            max-height: 25vh;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 10;
+            -webkit-box-orient: vertical;
+            margin-bottom: 10px;
+            margin-top: 20%;
+        }
+
+        .card-title.product {
+            font-size: 1.25em;
+            margin-top: 5%;
+        }
+    }

@@ -23,7 +23,7 @@
     {
         <a asp-controller="Products" asp-action="Details" asp-route-id="@item.ProductId">
             <div class="card1">
-                <img src=@Html.DisplayFor(modelItem => item.ImageUrl) class="card-img-top" alt="@Html.DisplayFor(modelItem => item.Name)">
+                <img src="@Url.Content(item.ImageUrl)" class="card-img-top" alt="@Html.DisplayFor(modelItem => item.Name)">
                 <div class="card-body">
                     <h5 class="title1">@Html.DisplayFor(modelItem => item.Name)</h5>
                     <p class="title1">

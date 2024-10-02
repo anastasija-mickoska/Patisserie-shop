@@ -8,5 +8,8 @@ namespace Patisserie.ViewModels
         public Product Product { get; set; }
         public IEnumerable<int>? SelectedFlavours { get; set; }
         public IEnumerable<SelectListItem>? FlavourList { get; set; }
+        public string? ImageUrl { get; set; }
+        public IFormFile ImageUrlFile { get; set; }
+
     }
 }

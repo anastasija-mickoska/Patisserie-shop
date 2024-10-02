@@ -18,11 +18,13 @@ namespace Patisserie.Controllers
     {
         private readonly PatisserieContext _context;
         private readonly UserManager<PatisserieUser> _userManager;
+        private readonly IWebHostEnvironment _environment;
 
-        public ProductsController(PatisserieContext context, UserManager<PatisserieUser> userManager)
+        public ProductsController(PatisserieContext context, UserManager<PatisserieUser> userManager, IWebHostEnvironment environment)
         {
             _context = context;
-            _userManager= userManager;
+            _userManager = userManager;
+            _environment = environment;
         }
         [HttpPost]
         [Authorize(Roles = "User")]
@@ -139,12 +141,21 @@ namespace Patisserie.Controllers
         // POST: Products/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ProductsFlavoursEditViewModel viewmodel)
+        public async Task<IActionResult> Create(ProductsFlavoursEditViewModel viewmodel, IFormFile ImageUrlFile)
         {
             if (!ModelState.IsValid)
             {
                 try
                 {
+                    if (ImageUrlFile != null)
+                    {
+                        var imagePath = Path.Combine(_environment.WebRootPath, "uploads", ImageUrlFile.FileName);
+                        using (var stream = new FileStream(imagePath, FileMode.Create))
+                        {
+                            await ImageUrlFile.CopyToAsync(stream);
+                        }
+                        viewmodel.Product.ImageUrl = $"/uploads/{ImageUrlFile.FileName}";
+                    }
                     // Add the product to the database
                     _context.Add(viewmodel.Product);
                     await _context.SaveChangesAsync();
@@ -213,7 +224,7 @@ namespace Patisserie.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, ProductsFlavoursEditViewModel viewmodel)
+        public async Task<IActionResult> Edit(int id, ProductsFlavoursEditViewModel viewmodel, IFormFile ImageUrlFile)
         {
             if (id != viewmodel.Product.ProductId)
             {
@@ -224,6 +235,22 @@ namespace Patisserie.Controllers
             {
                 try
                 {
+                    if (ImageUrlFile != null)
+                    {
+                        var imagePath = Path.Combine(_environment.WebRootPath, "uploads", ImageUrlFile.FileName);
+                        using (var stream = new FileStream(imagePath, FileMode.Create))
+                        {
+                            await ImageUrlFile.CopyToAsync(stream);
+                        }
+                        viewmodel.Product.ImageUrl = $"/uploads/{ImageUrlFile.FileName}";
+                    }
+                    else
+                    {
+                        viewmodel.Product.ImageUrl = _context.Product
+                            .Where(p => p.ProductId == id)
+                            .Select(p => p.ImageUrl)
+                            .FirstOrDefault();
+                    }
                     _context.Update(viewmodel.Product);
                     await _context.SaveChangesAsync();
                     IEnumerable<int> newFlavourList = viewmodel.SelectedFlavours ?? Enumerable.Empty<int>();
